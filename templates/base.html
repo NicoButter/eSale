@@ -1,0 +1,55 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      eSale -{% block title %}
+        Inicio
+      {% endblock %}
+    </title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="{% static 'css/base_styles.css' %}">
+
+  </head>
+  <body>
+    <header>
+      <h1>eSale</h1>
+      <nav>
+        {% if user.is_authenticated %}
+          {% if user.perfilusuario.id_rol.nombre_rol == 'Administrador' %}
+            <a href="{% url 'dashboards:administrador_dashboard' %}">Dashboard Admin</a>
+          {% elif user.perfilusuario.id_rol.nombre_rol == 'Vendedor' %}
+            <a href="{% url 'dashboards:vendedor_dashboard' %}">Dashboard Vendedor</a>
+          {% elif user.perfilusuario.id_rol.nombre_rol == 'Cliente' %}
+            <a href="{% url 'dashboards:cliente_dashboard' %}">Dashboard Cliente</a>
+          {% endif %}
+          <a href="{% url 'accounts:logout' %}">Cerrar Sesión</a>
+        {% else %}
+          <a href="{% url 'accounts:login' %}">Iniciar Sesión</a>
+          <a href="{% url 'accounts:register' %}">Registrarse</a>
+        {% endif %}
+      </nav>
+    </header>
+    <div class="content">
+      {% if messages %}
+        {% for message in messages %}
+          <p style="color: {% if message.tags == 'error' %}
+              red
+            {% else %}
+              green
+            {% endif %};">{{ message }}</p>
+        {% endfor %}
+      {% endif %}
+      {% block content %}
+
+      {% endblock %}
+    </div>
+  </body>
+</html>

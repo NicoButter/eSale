@@ -33,7 +33,8 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('accounts:login')
+    messages.success(request, 'Has cerrado sesión exitosamente.')
+    return render(request, 'accounts/logout.html')
 
 def register_view(request):
     if request.method == 'POST':
