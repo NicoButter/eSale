@@ -8,30 +8,19 @@
     <link rel="stylesheet" href="{% static 'core/css/landing_styles.css' %}">
 </head>
 <body>
-    <header class="banner">
-        <h1>Bienvenido a eSale</h1>
-        <p>¡Descubre las mejores ofertas en electrónica, ropa y más!</p>
-        <div class="cta-buttons">
-            <a href="{% url 'accounts:register' %}" class="btn">Regístrate</a>
-            <a href="{% url 'accounts:login' %}" class="btn">Inicia Sesión</a>
-        </div>
-    </header>
+    <header class="navbar">
+    <div class="navbar-left">
+            <img src="{% static 'core/img/header_logo.png' %}" alt="header_logo" class="logo-img">
+    </div>
+    <div class="navbar-right">
+        <a href="{% url 'accounts:register' %}" class="btn btn-nav">Regístrate</a>
+        <a href="{% url 'accounts:login' %}" class="btn btn-nav">Inicia Sesión</a>
+    </div>
+</header>
 
-    <section class="featured-products">
-        <h2>Ofertas Destacadas</h2>
-        <div class="product-grid">
-            {% for articulo in articulos %}
-                <div class="product-card">
-                    <h3>{{ articulo.nombre }}</h3>
-                    <p>{{ articulo.descripcion|truncatewords:10 }}</p>
-                    <p class="price">${{ articulo.precio }}</p>
-                    <a href="{% url 'store:agregar_al_carrito' articulo.id_articulo %}" class="btn">Agregar al Carrito</a>
-                </div>
-            {% empty %}
-                <p>No hay ofertas disponibles en este momento.</p>
-            {% endfor %}
-        </div>
-    </section>
+<section class="banner">
+    <h2>¡Descubre las mejores ofertas en electrónica, ropa y más!</h2>
+</section>
 
     <section class="categories">
         <h2>Categorías Populares</h2>
