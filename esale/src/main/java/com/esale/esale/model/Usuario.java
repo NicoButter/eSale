@@ -22,6 +22,9 @@ public class Usuario {
     private Long id;
 
     private String nombre;
+    
+    @Column(unique = true, nullable = false, length = 20)
+    private String dni;
 
     @Column(unique = true)
     private String email;
