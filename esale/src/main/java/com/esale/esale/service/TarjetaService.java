@@ -22,5 +22,8 @@ public class TarjetaService {
     public Tarjeta guardar(Tarjeta tarjeta) {
         return tarjetaRepository.save(tarjeta);
     }
-}
 
+    public void eliminar(Long id) {
+        tarjetaRepository.deleteById(id);
+    }
+}
