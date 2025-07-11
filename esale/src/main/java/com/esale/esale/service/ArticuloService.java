@@ -34,4 +34,8 @@ public class ArticuloService {
     public void eliminarPorId(Long id) {
         articuloRepository.deleteById(id);
     }
+
+     public void eliminar(Long id) {
+        articuloRepository.deleteById(id);
+    }
 }

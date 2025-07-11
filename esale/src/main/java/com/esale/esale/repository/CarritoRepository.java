@@ -9,6 +9,10 @@ import com.esale.esale.model.EstadoCarrito;
 import com.esale.esale.model.Usuario;
 
 public interface CarritoRepository extends JpaRepository<Carrito, Long> {
+
     Optional<Carrito> findByUsuarioAndEstado(Usuario usuario, EstadoCarrito estado);
+
+    Optional<Carrito> findByUsuario(Usuario usuario);
+    
 }
 

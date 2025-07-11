@@ -10,7 +10,6 @@ import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Entity
 @Setter
 @Getter
@@ -21,6 +20,7 @@ public class Comentario {
     private Long id;
 
     private String contenido;
+
     private LocalDateTime fecha;
 
     @ManyToOne
@@ -28,5 +28,7 @@ public class Comentario {
 
     @ManyToOne
     private Articulo articulo;
+
+    private String texto;
 
 }

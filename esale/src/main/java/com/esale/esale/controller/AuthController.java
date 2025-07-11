@@ -1,12 +1,17 @@
 package com.esale.esale.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.esale.esale.dto.LoginRequestDTO;
 import com.esale.esale.dto.RegisterRequestDTO;
 import com.esale.esale.model.Usuario;
 import com.esale.esale.service.UsuarioService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -30,7 +35,7 @@ public class AuthController {
         usuario.setRol("CLIENTE"); // Valor por defecto
 
         Usuario guardado = usuarioService.registrarUsuario(usuario);
-        return ResponseEntity.ok("Usuario registrado con éxito.");
+        return ResponseEntity.ok(guardado);
     }
 
     @PostMapping("/login")
@@ -39,7 +44,7 @@ public class AuthController {
 
         if (valido) {
             Usuario usuario = usuarioService.buscarPorEmail(request.getEmail()).get();
-            return ResponseEntity.ok(usuario); // O podés devolver solo nombre y rol, si preferís
+            return ResponseEntity.ok(usuario); //o devolver solo nombre y rol
         } else {
             return ResponseEntity.status(401).body("Credenciales inválidas");
         }

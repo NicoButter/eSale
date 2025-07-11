@@ -26,4 +26,9 @@ public class EmpresaTransporteService {
     public Optional<EmpresaTransporte> buscarPorNombre(String nombre) {
         return empresaRepository.findByNombre(nombre);
     }
+
+    public void eliminar(Long id) {
+        empresaRepository.deleteById(id);
+    }
+
 }

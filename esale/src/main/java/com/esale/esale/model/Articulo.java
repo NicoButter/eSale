@@ -13,7 +13,6 @@ import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Entity
 @Setter
 @Getter
