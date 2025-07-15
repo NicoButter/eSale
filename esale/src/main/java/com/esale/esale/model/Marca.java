@@ -1,28 +1,27 @@
 package com.esale.esale.model;
 
-import java.time.LocalDate;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity
 @Getter
 @Setter
-public class ArticuloDestacado {
+@Entity
+public class Marca {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "articulo_id")
-    private Articulo articulo;
+    private String nombre; // Nombre de la marca (e.g., Samsung, Xiaomi)
+    private String paisOrigen; // Atributo adicional opcional
 
-    private LocalDate fechaInicio;
-    private LocalDate fechaFin;
+    @OneToMany(mappedBy = "marca")
+    private List<Articulo> articulos;
+
 }

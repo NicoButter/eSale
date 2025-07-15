@@ -1,13 +1,22 @@
 package com.esale.esale.controller;
 
-import com.esale.esale.model.Articulo;
-import com.esale.esale.service.ArticuloService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.esale.esale.model.Articulo;
+import com.esale.esale.service.ArticuloService;
 
 @RestController
 @RequestMapping("/articulos")
@@ -38,10 +47,13 @@ public class ArticuloController {
         Optional<Articulo> existente = articuloService.buscarPorId(id);
         if (existente.isPresent()) {
             Articulo art = existente.get();
-            art.setMarca(actualizado.getMarca());
             art.setModelo(actualizado.getModelo());
             art.setPrecioSinIVA(actualizado.getPrecioSinIVA());
             art.setDescripcion(actualizado.getDescripcion());
+            art.setStock(actualizado.getStock());
+            art.setImageUrl(actualizado.getImageUrl());
+            art.setMarca(actualizado.getMarca());
+            art.setRebaja(actualizado.getRebaja());
             return ResponseEntity.ok(articuloService.guardar(art));
         } else {
             return ResponseEntity.notFound().build();
@@ -50,7 +62,17 @@ public class ArticuloController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        articuloService.eliminar(id);
+        articuloService.eliminarPorId(id); // Usar eliminarPorId para consistencia
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/featured")
+    public List<Articulo> getFeaturedProducts() {
+        return articuloService.findFeaturedProducts();
+    }
+
+    @GetMapping("/offers")
+    public List<Articulo> getProductsWithOffers() {
+        return articuloService.findProductsWithOffers();
     }
 }

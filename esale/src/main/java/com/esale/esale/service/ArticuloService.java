@@ -35,7 +35,15 @@ public class ArticuloService {
         articuloRepository.deleteById(id);
     }
 
-     public void eliminar(Long id) {
-        articuloRepository.deleteById(id);
+    // Eliminar método redundante
+    // public void eliminar(Long id) { ... } // Opcional, puedes quitarlo
+
+    // Nuevos métodos para la landing
+    public List<Articulo> findFeaturedProducts() {
+        return articuloRepository.findFeaturedProducts();
+    }
+
+    public List<Articulo> findProductsWithOffers() {
+        return articuloRepository.findProductsWithOffers();
     }
 }

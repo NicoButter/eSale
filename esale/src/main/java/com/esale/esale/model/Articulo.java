@@ -1,49 +1,47 @@
 package com.esale.esale.model;
 
+import java.math.BigDecimal;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity
 @Setter
 @Getter
+@Entity
 public class Articulo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
-    private String codigoArticulo;
-
-    private String marca;
+    private String codigo; // Código único
     private String modelo;
+    private BigDecimal precioSinIVA;
     private String descripcion;
-    private Double precioSinIVA;
-    private Integer stock;
+    private int stock;
+
+    @Column(name = "image_url")
+    private String imageUrl;
 
     @ManyToOne
-    private Seccion seccion;
+    @JoinColumn(name = "marca_id")
+    private Marca marca;
 
-    @OneToMany(mappedBy = "articulo", cascade = CascadeType.ALL)
-    private List<EspecificacionTecnica> especificaciones;
+    @OneToOne
+    @JoinColumn(name = "rebaja_id")
+    private Rebaja rebaja;
 
-    @OneToMany(mappedBy = "articulo", cascade = CascadeType.ALL)
-    private List<Valoracion> valoraciones;
-
-    @OneToMany(mappedBy = "articulo", cascade = CascadeType.ALL)
-    private List<Comentario> comentarios;
-
-    @OneToMany(mappedBy = "articulo", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "articulo")
     private List<ArticuloDestacado> destacados;
 
 }
