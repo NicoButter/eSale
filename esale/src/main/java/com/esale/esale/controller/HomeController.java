@@ -8,7 +8,6 @@ public class HomeController {
 
     @GetMapping("/")
     public String index() {
-        // Redirige a index.html (generado por Angular) en la carpeta static
-        return "forward:/index.html";
+        return "index"; // Sirve index.html desde static
     }
 }

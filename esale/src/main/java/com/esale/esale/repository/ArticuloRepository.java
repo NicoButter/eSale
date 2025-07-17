@@ -9,7 +9,10 @@ import org.springframework.data.jpa.repository.Query;
 import com.esale.esale.model.Articulo;
 
 public interface ArticuloRepository extends JpaRepository<Articulo, Long> {
-    Optional<Articulo> findByCodigoArticulo(String codigoArticulo);
+    
+    // Optional<Articulo> findByCodigoArticulo(String codigoArticulo);
+
+    Optional<Articulo> findByCodigo(String codigo); // Cambiado de findByCodigoArticulo a findByCodigo
 
     @Query("SELECT a FROM Articulo a JOIN a.destacados d WHERE d.fechaInicio <= CURRENT_DATE AND d.fechaFin >= CURRENT_DATE")
     List<Articulo> findFeaturedProducts();

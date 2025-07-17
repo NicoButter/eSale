@@ -23,8 +23,8 @@ public class ArticuloService {
         return articuloRepository.findById(id);
     }
 
-    public Optional<Articulo> buscarPorCodigo(String codigo) {
-        return articuloRepository.findByCodigoArticulo(codigo);
+    public Optional<Articulo> buscarPorCodigo(String codigo) { // Asegúrate de que el parámetro sea 'codigo'
+        return articuloRepository.findByCodigo(codigo); // Actualizado para usar findByCodigo
     }
 
     public Articulo guardar(Articulo articulo) {

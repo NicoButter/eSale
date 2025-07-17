@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,12 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.esale.esale.model.Articulo;
 import com.esale.esale.service.ArticuloService;
 
-@RestController
+@Controller // Cambiado a @Controller para vistas, no @RestController
 @RequestMapping("/articulos")
 @CrossOrigin(origins = "*")
 public class ArticuloController {
@@ -27,22 +27,27 @@ public class ArticuloController {
     private ArticuloService articuloService;
 
     @GetMapping
+    public String index() {
+        return "index"; // Resuelve a index.html en static
+    }
+
+    @GetMapping("/articulos")
     public List<Articulo> listarTodos() {
         return articuloService.obtenerTodos();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/articulos/{id}")
     public ResponseEntity<Articulo> buscarPorId(@PathVariable Long id) {
         Optional<Articulo> articulo = articuloService.buscarPorId(id);
         return articulo.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+    @PostMapping("/articulos")
     public Articulo crear(@RequestBody Articulo articulo) {
         return articuloService.guardar(articulo);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/articulos/{id}")
     public ResponseEntity<Articulo> actualizar(@PathVariable Long id, @RequestBody Articulo actualizado) {
         Optional<Articulo> existente = articuloService.buscarPorId(id);
         if (existente.isPresent()) {
@@ -60,18 +65,18 @@ public class ArticuloController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/articulos/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        articuloService.eliminarPorId(id); // Usar eliminarPorId para consistencia
+        articuloService.eliminarPorId(id);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/featured")
+    @GetMapping("/articulos/featured")
     public List<Articulo> getFeaturedProducts() {
         return articuloService.findFeaturedProducts();
     }
 
-    @GetMapping("/offers")
+    @GetMapping("/articulos/offers")
     public List<Articulo> getProductsWithOffers() {
         return articuloService.findProductsWithOffers();
     }

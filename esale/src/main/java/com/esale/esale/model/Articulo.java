@@ -44,4 +44,7 @@ public class Articulo {
     @OneToMany(mappedBy = "articulo")
     private List<ArticuloDestacado> destacados;
 
+    @ManyToOne
+    @JoinColumn(name = "seccion_id") // Nueva relación con Seccion
+    private Seccion seccion; // Propiedad inversa requerida
 }
