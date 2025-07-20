@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -13,23 +14,40 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SeguridadConfig {
 
     @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().requestMatchers(
+                "/index.html",
+                "/",
+                "/**.js",
+                "/**.css",
+                "/assets/**",
+                "/favicon.ico");
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/", "/index.html", "/**/*.js", "/**/*.css", "/assets/**").permitAll() // Permitir acceso a la landing y estáticos
-                .requestMatchers("/articulos/**").authenticated() // Proteger rutas de artículos
-                .anyRequest().authenticated() // Otras rutas requieren autenticación
-            )
-            .formLogin(formLogin -> formLogin
-                .loginPage("/login") // Página de login personalizada
-                .permitAll()
-                .defaultSuccessUrl("/", true) // Redirigir a / tras login exitoso
-            )
-            .logout(logout -> logout
-                .permitAll()
-                .logoutSuccessUrl("/") // Redirigir a / tras logout
-            )
-            .csrf(csrf -> csrf.disable()); // Desactivar CSRF temporalmente (opcional, reactívalo  para formularios)
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(
+                                "/", // Landing
+                                "/index.html", // Landing HTML
+                                "/favicon.ico", // Ícono
+                                "/**.js", // JS frontend
+                                "/**.css", // CSS frontend
+                                "/assets/**", // Imágenes u otros recursos
+                                "/usuario/login" // Página de login personalizada
+                        ).permitAll()
+                        .requestMatchers("/articulos/**").authenticated()
+                        .anyRequest().authenticated())
+                .formLogin(formLogin -> formLogin
+                        .loginPage("/usuario/login") // Nunca /login
+                        .permitAll()
+                        .defaultSuccessUrl("/", true))
+                .logout(logout -> logout
+                        .permitAll()
+                        .logoutSuccessUrl("/"))
+                .csrf(csrf -> csrf.disable());
+
         return http.build();
     }
 
