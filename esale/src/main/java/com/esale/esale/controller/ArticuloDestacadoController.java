@@ -3,7 +3,6 @@ package com.esale.esale.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,8 +11,7 @@ import com.esale.esale.model.ArticuloDestacado;
 import com.esale.esale.service.ArticuloDestacadoService;
 
 @RestController
-@RequestMapping("/destacados")
-@CrossOrigin(origins = "*")
+@RequestMapping("/articulos/destacados") // Cambio clave aquí
 public class ArticuloDestacadoController {
 
     @Autowired

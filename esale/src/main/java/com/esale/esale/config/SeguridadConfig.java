@@ -13,46 +13,47 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SeguridadConfig {
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers(
-                "/index.html",
-                "/",
-                "/**.js",
-                "/**.css",
-                "/assets/**",
-                "/favicon.ico");
-    }
+        @Bean
+        public WebSecurityCustomizer webSecurityCustomizer() {
+                return (web) -> web.ignoring().requestMatchers(
+                                "/index.html",
+                                "/",
+                                "/**/*.js",
+                                "/**/*.css",
+                                "/assets/**",
+                                "/favicon.ico");
+        }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(
-                                "/", // Landing
-                                "/index.html", // Landing HTML
-                                "/favicon.ico", // Ícono
-                                "/**.js", // JS frontend
-                                "/**.css", // CSS frontend
-                                "/assets/**", // Imágenes u otros recursos
-                                "/usuario/login" // Página de login personalizada
-                        ).permitAll()
-                        .requestMatchers("/articulos/**").authenticated()
-                        .anyRequest().authenticated())
-                .formLogin(formLogin -> formLogin
-                        .loginPage("/usuario/login") // Nunca /login
-                        .permitAll()
-                        .defaultSuccessUrl("/", true))
-                .logout(logout -> logout
-                        .permitAll()
-                        .logoutSuccessUrl("/"))
-                .csrf(csrf -> csrf.disable());
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+                http
+                                .authorizeHttpRequests(authorize -> authorize
+                                                .requestMatchers(
+                                                                "/",
+                                                                "/index.html",
+                                                                "/**/*.js",
+                                                                "/**/*.css",
+                                                                "/assets/**",
+                                                                "/favicon.ico",
+                                                                "/destacados/**", // <--- IMPORTANTE: estas rutas
+                                                                                  // públicas
+                                                                "/offers/**"
+                                                ).permitAll()
+                                                .anyRequest().authenticated() // lo demás requiere login
+                                )
+                                .formLogin(form -> form
+                                                .loginPage("/usuario/login")
+                                                .permitAll()
+                                                .defaultSuccessUrl("/", true))
+                                .logout(logout -> logout
+                                                .permitAll()
+                                                .logoutSuccessUrl("/"))
+                                .csrf(csrf -> csrf.disable());
+                return http.build();
+        }
 
-        return http.build();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+                return new BCryptPasswordEncoder();
+        }
 }

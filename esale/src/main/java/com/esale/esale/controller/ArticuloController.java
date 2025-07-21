@@ -17,35 +17,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.esale.esale.model.Articulo;
 import com.esale.esale.service.ArticuloService;
 
-@Controller // Cambiado a @Controller para vistas, no @RestController
+@Controller
 @RequestMapping("/articulos")
 public class ArticuloController {
 
     @Autowired
     private ArticuloService articuloService;
 
-    // @GetMapping
-    // public String index() {
-    //     return "index"; // Resuelve a index.html en static
-    // }
-
-    @GetMapping("/articulos")
+    @GetMapping
     public List<Articulo> listarTodos() {
         return articuloService.obtenerTodos();
     }
 
-    @GetMapping("/articulos/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Articulo> buscarPorId(@PathVariable Long id) {
         Optional<Articulo> articulo = articuloService.buscarPorId(id);
         return articulo.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/articulos")
+    @PostMapping
     public Articulo crear(@RequestBody Articulo articulo) {
         return articuloService.guardar(articulo);
     }
 
-    @PutMapping("/articulos/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Articulo> actualizar(@PathVariable Long id, @RequestBody Articulo actualizado) {
         Optional<Articulo> existente = articuloService.buscarPorId(id);
         if (existente.isPresent()) {
@@ -63,19 +58,9 @@ public class ArticuloController {
         }
     }
 
-    @DeleteMapping("/articulos/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         articuloService.eliminarPorId(id);
         return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/articulos/featured")
-    public List<Articulo> getFeaturedProducts() {
-        return articuloService.findFeaturedProducts();
-    }
-
-    @GetMapping("/articulos/offers")
-    public List<Articulo> getProductsWithOffers() {
-        return articuloService.findProductsWithOffers();
     }
 }
