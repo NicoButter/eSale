@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.esale.esale.dto.ArticuloDTO;
 import com.esale.esale.model.Articulo;
 import com.esale.esale.service.ArticuloService;
 
@@ -25,8 +26,10 @@ public class ArticuloController {
     private ArticuloService articuloService;
 
     @GetMapping
-    public List<Articulo> listarTodos() {
-        return articuloService.obtenerTodos();
+    public List<ArticuloDTO> listarTodos() {
+        return articuloService.obtenerTodos().stream()
+            .map(ArticuloDTO::new)
+            .toList();
     }
 
     @GetMapping("/{id}")
