@@ -22,11 +22,11 @@ public class Usuario {
     private Long id;
 
     private String nombre;
-    
+
     @Column(unique = true, nullable = false, length = 20)
     private String dni;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
     private String password;

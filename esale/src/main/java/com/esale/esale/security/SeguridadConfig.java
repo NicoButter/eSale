@@ -1,4 +1,4 @@
-package com.esale.esale.config;
+package com.esale.esale.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,38 +14,29 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SeguridadConfig {
 
-        // @Bean
-        // public WebSecurityCustomizer webSecurityCustomizer() {
-        // return (web) -> web.ignoring().requestMatchers(
-        // "/index.html",
-        // "/",
-        // "/**/*.js",
-        // "/**/*.css",
-        // "/assets/**",
-        // "/favicon.ico");
-        // }
-
-        @Bean
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                     "/", "/index.html",
-                    "/assets/**", "/styles.css",
-                    "/*.js", "/*.css", "/*.ico",
-                    "/articulos/**", "/destacados", "/ofertas"
+                    "/assets/**",
+                    "/**/*.js",
+                    "/**/*.css",
+                    "/**/*.ico",
+                    "/articulos/**"
                 ).permitAll()
                 .anyRequest().authenticated()
             )
-            .formLogin(withDefaults()) // usamos login default por ahora
+            .formLogin(withDefaults())
             .logout(logout -> logout.permitAll())
             .csrf(csrf -> csrf.disable());
 
         return http.build();
     }
 
-        @Bean
-        public PasswordEncoder passwordEncoder() {
-                return new BCryptPasswordEncoder();
-        }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }
