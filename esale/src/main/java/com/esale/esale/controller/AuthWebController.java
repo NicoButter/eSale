@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.esale.esale.dto.LoginRequestDTO;
 import com.esale.esale.dto.LoginResponseDTO;
@@ -63,23 +62,5 @@ public class AuthWebController {
 
         usuarioService.registrarUsuario(usuario);
         return "redirect:/login";
-    }
-
-    // Procesar login manual (solo si no usás Spring Security)
-    @PostMapping("/login")
-    public String procesarLogin(
-            @RequestParam String email,
-            @RequestParam String password,
-            Model model) {
-        boolean valido = usuarioService.validarCredenciales(email, password);
-
-        if (valido) {
-            Usuario usuario = usuarioService.buscarPorEmail(email).get();
-            model.addAttribute("usuario", usuario); // opcional, si querés mostrarlo
-            return "redirect:/"; // o `/dashboard` según el rol
-        } else {
-            model.addAttribute("error", "Credenciales inválidas");
-            return "usuario/login";
-        }
     }
 }
