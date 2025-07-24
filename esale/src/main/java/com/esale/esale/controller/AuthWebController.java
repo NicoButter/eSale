@@ -30,8 +30,7 @@ public class AuthWebController {
         boolean credencialesValidas = usuarioService.validarCredenciales(email, passwordPlano);
 
         if (credencialesValidas) {
-            Usuario usuario = usuarioService.buscarPorEmail(email)
-                    .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+            Usuario usuario = usuarioService.buscarPorEmail(email);
 
             LoginResponseDTO response = new LoginResponseDTO();
             response.setId(usuario.getId());
@@ -55,12 +54,12 @@ public class AuthWebController {
     // Procesar registro
     @PostMapping("/registro")
     public String procesarRegistro(@ModelAttribute Usuario usuario, Model model) {
-        if (usuarioService.buscarPorEmail(usuario.getEmail()).isPresent()) {
+        if (usuarioService.existePorEmail(usuario.getEmail())) {
             model.addAttribute("error", "El email ya está registrado.");
             return "usuario/registro";
         }
 
-        usuarioService.registrarUsuario(usuario);
+        usuarioService.crearUsuario(usuario);
         return "redirect:/login";
     }
 }

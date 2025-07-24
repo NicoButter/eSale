@@ -34,7 +34,7 @@ public class PedidoController {
 
     @GetMapping("/usuario/{email}")
     public List<Pedido> listarPorUsuario(@PathVariable String email) {
-        Usuario usuario = usuarioService.buscarPorEmail(email).orElseThrow();
+        Usuario usuario = usuarioService.buscarPorEmail(email);
         return pedidoService.buscarPorUsuario(usuario);
     }
 

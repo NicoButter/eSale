@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,6 @@ import com.esale.esale.model.Usuario;
 import com.esale.esale.repository.UsuarioRepository;
 
 import jakarta.transaction.Transactional;
-
 
 @Service
 @Transactional
@@ -23,24 +23,26 @@ public class UsuarioService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public Usuario registrarUsuario(Usuario usuario) {
-        // Hash de la contraseña
-        String hashed = passwordEncoder.encode(usuario.getPassword());
-        usuario.setPassword(hashed);
+    public Usuario crearUsuario(Usuario usuario) {
+        Optional<Usuario> existente = usuarioRepository.findByEmail(usuario.getEmail());
+        if (existente.isPresent()) {
+            throw new RuntimeException("Ya existe un usuario con ese email");
+        }
+
+        String hashedPassword = passwordEncoder.encode(usuario.getPassword());
+        usuario.setPassword(hashedPassword);
+
         return usuarioRepository.save(usuario);
     }
 
-    public Optional<Usuario> buscarPorEmail(String email) {
-        return usuarioRepository.findByEmail(email);
+    public Usuario buscarPorEmail(String email) {
+        return usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con email: " + email));
     }
 
-    public boolean validarCredenciales(String email, String passwordPlano) {
-        Optional<Usuario> opt = usuarioRepository.findByEmail(email);
-        if (opt.isPresent()) {
-            Usuario usuario = opt.get();
-            return passwordEncoder.matches(passwordPlano, usuario.getPassword());
-        }
-        return false;
+    public boolean validarCredenciales(String email, String password) {
+        Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
+        return optUsuario.map(usuario -> passwordEncoder.matches(password, usuario.getPassword())).orElse(false);
     }
 
     public List<Usuario> obtenerTodos() {
@@ -56,6 +58,10 @@ public class UsuarioService {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + id));
         usuario.setRol(nuevoRol);
         return usuarioRepository.save(usuario);
+    }
+
+    public boolean existePorEmail(String email) {
+        return usuarioRepository.findByEmail(email).isPresent();
     }
 
 }
