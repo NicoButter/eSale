@@ -16,9 +16,10 @@ public class SeguridadConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/", "/index.html", "/favicon.ico", "/js/**", "/css/**", "/images/**",
-                                "/**/*.js", "/**/*.css", "articulos/destacados", "articulos/destacados/hoy")
+                                "/**/*.js", "/**/*.css", "articulos/destacados", "articulos/destacados/hoy", "usuarios/register", "usuarios/login")
                         .permitAll()
                         .anyRequest().authenticated())
                 .formLogin(withDefaults());

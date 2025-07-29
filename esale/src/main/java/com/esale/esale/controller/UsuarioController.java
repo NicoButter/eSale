@@ -66,7 +66,7 @@ public class UsuarioController {
     @PostMapping("/register")
     public ResponseEntity<?> registrar(@RequestBody Usuario nuevoUsuario) {
         try {
-            Usuario creado = usuarioService.crearUsuario(nuevoUsuario);
+            Usuario creado = usuarioService.registrarUsuario(nuevoUsuario);
             return ResponseEntity.status(HttpStatus.CREATED).body(creado);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al registrar usuario: " + e.getMessage());

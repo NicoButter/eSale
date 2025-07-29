@@ -23,7 +23,7 @@ public class UsuarioService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public Usuario crearUsuario(Usuario usuario) {
+    public Usuario registrarUsuario(Usuario usuario) {
         Optional<Usuario> existente = usuarioRepository.findByEmail(usuario.getEmail());
         if (existente.isPresent()) {
             throw new RuntimeException("Ya existe un usuario con ese email");
@@ -41,9 +41,14 @@ public class UsuarioService {
     }
 
     public boolean validarCredenciales(String email, String password) {
-        Optional<Usuario> optUsuario = usuarioRepository.findByEmail(email);
-        return optUsuario.map(usuario -> passwordEncoder.matches(password, usuario.getPassword())).orElse(false);
+    Optional<Usuario> optionalUsuario = usuarioRepository.findByEmail(email);
+    if (optionalUsuario.isEmpty()) {
+        return false;
     }
+
+    Usuario usuario = optionalUsuario.get();
+    return passwordEncoder.matches(password, usuario.getPassword());
+}
 
     public List<Usuario> obtenerTodos() {
         return usuarioRepository.findAll();

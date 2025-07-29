@@ -59,7 +59,7 @@ public class AuthWebController {
             return "usuario/registro";
         }
 
-        usuarioService.crearUsuario(usuario);
+        usuarioService.registrarUsuario(usuario);
         return "redirect:/login";
     }
 }
